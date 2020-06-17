@@ -12,6 +12,9 @@ if ( !defined( 'ABSPATH' ) ) {
     exit;
 }
 
+define( "PLUGIN_DIR_PATH", plugin_dir_path( __FILE__ ) );
+define( "PLUGIN_URL", plugins_url() );
+
 function add_to_admin_menu() {
 
     add_menu_page(
@@ -21,7 +24,7 @@ function add_to_admin_menu() {
         'custom-plugin', // URL Slug
         'custom_plugin_function', // What shows in this page(Callback Function)
         'dashicons-welcome-write-blog', // Icon
-        6 // Menu Position
+        6// Menu Position
     );
 
     add_submenu_page(
@@ -46,9 +49,17 @@ function add_to_admin_menu() {
 add_action( 'admin_menu', 'add_to_admin_menu' );
 
 function custom_plugin_function() {
-    echo "New Page for Plugin Created.";
+    include_once PLUGIN_DIR_PATH . '/views/add-new.php';
 }
 
 function submenu_one() {
-    echo "New Submenu One for Plugin Created.";
+    include_once PLUGIN_DIR_PATH . '/views/all-page.php';
 }
+
+// Assets -------------------------------------------------------------
+function plugin_assets() {
+    wp_enqueue_style( 'style', PLUGIN_URL . '/new-plugin/assets/css/style.css', '', 1.0 );
+    wp_enqueue_script( 'script', PLUGIN_URL . '/new-plugin/assets/js/app.js', '', 1.0, true );
+}
+
+add_action( 'admin_enqueue_scripts', 'plugin_assets' );
