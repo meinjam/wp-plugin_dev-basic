@@ -63,3 +63,42 @@ function plugin_assets() {
 }
 
 add_action( 'admin_enqueue_scripts', 'plugin_assets' );
+
+/* Database ------------------------------------------- */
+
+// Create Table
+function custom_plugin_table_create() {
+
+    global $wpdb;
+    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+    $sql = "
+            CREATE TABLE `ih_custom_table` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `name` varchar(255) NOT NULL,
+                `email` varchar(255) NOT NULL,
+                `address` varchar(255) NOT NULL,
+                PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+            ";
+    dbDelta( $sql );
+}
+
+register_activation_hook( __FILE__, 'custom_plugin_table_create' );
+
+// Delete table
+function custom_plugin_table_delete() {
+
+    global $wpdb;
+    $wpdb->query( "DROP table IF Exists ih_custom_table" );
+}
+
+register_deactivation_hook( __FILE__, 'custom_plugin_table_delete' );
+
+function custom_plugin_table_delete_uninstall() {
+
+    global $wpdb;
+    $wpdb->query( "DROP table IF Exists ih_custom_table" );
+}
+
+register_uninstall_hook( __FILE__, 'custom_plugin_table_delete_uninstall' );
