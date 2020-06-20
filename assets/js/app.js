@@ -1,1 +1,9 @@
-console.log("Hiii");
+// $(document).ready(function () {
+//   $(".clickbtn").click(function () {
+//     $("#post-post").validate({
+//       submitHandler:function () {
+//         let post = 
+//       }
+//     });
+//   });
+// });

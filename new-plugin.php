@@ -60,11 +60,14 @@ function submenu_one() {
 function plugin_assets() {
     wp_enqueue_style( 'style', PLUGIN_URL . '/new-plugin/assets/css/style.css', '', 1.0 );
     wp_enqueue_script( 'script', PLUGIN_URL . '/new-plugin/assets/js/app.js', '', 1.0, true );
+    wp_localize_script( 'script', 'ajaxUrl', admin_url( 'admin-ajax.php' ) );
 }
 
 add_action( 'admin_enqueue_scripts', 'plugin_assets' );
 
-/* Database ------------------------------------------- */
+/*
+Database -------------------------------------------
+ */
 
 // Create Table
 function custom_plugin_table_create() {
@@ -102,3 +105,20 @@ function custom_plugin_table_delete_uninstall() {
 }
 
 register_uninstall_hook( __FILE__, 'custom_plugin_table_delete_uninstall' );
+
+/*
+Create New Page when active this plugin -------------------------------------------
+ */
+function custom_plugin_create_page() {
+
+    $page = array();
+    $page['post_type'] = 'page';
+    $page['post_title'] = 'Custom Plugin Page';
+    $page['post_content'] = 'custom plugin page';
+    $page['post_status'] = 'publish';
+    $page['post_slug'] = 'custom-plugin-page';
+
+    wp_insert_post( $page );
+}
+
+register_activation_hook( __FILE__, 'custom_plugin_create_page' );
